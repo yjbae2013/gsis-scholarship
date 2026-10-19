@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>2026학년도 2학기 AITP 장학생 조회</title>
+<style>
+  :root {
+    --bg: #f4f6f9; --card: #ffffff; --text: #1b2430; --muted: #5f6b7a;
+    --line: #dde3ea; --accent: #1f4e9c; --accent-text: #ffffff;
+    --ok-bg: #eaf3ff; --ok-line: #b9d4f5; --no-bg: #fff4f2; --no-line: #f2c4bb; --no-text: #9a2b1a;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #12161c; --card: #1b2129; --text: #e6ebf1; --muted: #9aa6b4;
+      --line: #2e3742; --accent: #5b8fe0; --accent-text: #0d1117;
+      --ok-bg: #172a44; --ok-line: #2c4b75; --no-bg: #3a1d19; --no-line: #6b3329; --no-text: #f2a597;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+    line-height: 1.5; word-break: keep-all;
+  }
+  main { max-width: 440px; margin: 0 auto; padding: 48px 16px; }
+  h1 { font-size: 1.35rem; margin: 0 0 6px; }
+  .sub { color: var(--muted); font-size: .92rem; margin: 0 0 24px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 22px; }
+  label { display: block; font-size: .9rem; font-weight: 600; margin: 0 0 6px; }
+  .hint { font-weight: 400; color: var(--muted); }
+  input {
+    width: 100%; font-size: 1rem; padding: 11px 12px; margin: 0 0 16px;
+    border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--text);
+  }
+  input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  button {
+    width: 100%; font-size: 1rem; font-weight: 600; padding: 12px; border: 0; border-radius: 8px;
+    background: var(--accent); color: var(--accent-text); cursor: pointer;
+  }
+  button:disabled { opacity: .6; cursor: wait; }
+  #result { margin-top: 18px; }
+  .box { border-radius: 10px; padding: 16px 18px; border: 1px solid; }
+  .ok { background: var(--ok-bg); border-color: var(--ok-line); }
+  .no { background: var(--no-bg); border-color: var(--no-line); color: var(--no-text); }
+  .box h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  .row { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-top: 1px solid var(--ok-line); }
+  .row:first-of-type { border-top: 0; }
+  .amt { font-weight: 700; white-space: nowrap; }
+  .total { font-weight: 700; }
+  .box p { margin: 0; }
+  .box p + p { margin-top: 6px; font-size: .88rem; }
+  footer { color: var(--muted); font-size: .82rem; margin-top: 18px; text-align: center; }
+</style>
+</head>
+<body>
+<main>
+  <h1>2026학년도 2학기 AITP 장학생 조회</h1>
+  <p class="sub">이름, 생년월일, 학번을 입력하면 선정 분야와 장학액을 확인할 수 있습니다.</p>
+  <form class="card" id="f" autocomplete="off">
+    <label for="name">이름</label>
+    <input id="name" required placeholder="홍길동">
+    <label for="birth">생년월일 <span class="hint">(6자리, 예: 990101)</span></label>
+    <input id="birth" required inputmode="numeric" placeholder="990101">
+    <label for="sid">학번</label>
+    <input id="sid" required inputmode="numeric" placeholder="2026126001">
+    <button id="btn" type="submit">조회하기</button>
+    <div id="result" aria-live="polite"></div>
+  </form>
+  <footer>문의: 국제대학원 행정실</footer>
+</main>
+<script>
+const DATA = {"salt": "K4HGVFroKKl5gkP7pyooNQ==", "iter": 300000, "records": {"139f283ca906695c5f0109547c5982ed": "5RWa7h9Yj/p+7S2KhCuNpyuUovcqBhmpiaUZz6hnp/6R+X5y1RmarvHLBmu6FHKOzK3ND9tt9uPga/IUmLSfNB259SW6e1jlQWmIOc37mnVPfhY4e3Suc1fCJSTt2z4806s51ifSYkv+T39EC3Pv+Xn8p222V7sshcpjMpn86bxUibzf3mA/qX24d9SUmeoAZ1cQ2A==", "cd52cfc8a0fa6ca2fc2b5aca79853ee9": "/I5Osra+nlZFN8x8gWgBjiNLTkjfuPJFN+zXelnKYzJAoSquIpDVLuPj+kEG5CkJcsFrEkAznhn77wl2i5A9g19o17jSo2dqKqWD7wtDu1tq5IqbGxav/596gwynCWYlT3MMWZRDGlEqnAM1+SwV9PJIR+ckllMQxW3CXj8I7xj3BfGFE1lXhcJLW1Gfk8xsA4ZoFg==", "2a0fdff3a9af8349f70844f06be2f7e3": "pksl/T1yHx3Ww5UxhmtEKbBoLpHsHbt83ze7kF2fEkNIrAm3+GX9xccUa1+CP2hMBD6plwpw2zAR0V5Q5HlAMIfejzWFdX0UOFNGVN82TfUOD1XLWrAW9C2qBj1V1nplH7GNwd+nv/mOl1Ej5Ldr06sSnKwgJAUsO5LAkOSQi5Qj7+2fQtT+JZ/EDKXtVYl1s62sjw==", "3b8fe18f4dc236e15cb665700dcdb5bb": "ZKXqfuCBfFtWjceA1mJiPnkeOkrtYmrbYYB936CiMzjZEpvHO/oksM02RM4DXWGNqbIIXviQLkCQJv7VZ7knig2VA3FO3BfLzIpnnSiHLDqbkmlQjBWSHWb/yFfTrgfgUsqkE/Y65DdYW2hwiNd7uPNjIMpCNgPFKO6LPCDAK7rX7RWo3mejYIvOs5yfSCRPKlhXLA==", "eaecbea03869e4a8147c2a9d40228df6": "WI+sIA0nuwAcpJCmFMBtm24snBM6bAW3Sb5xbMkzyTGW36/mKlYXK8hRLIbiyHtUctpHN7L2TOQrJE9qPd9D3YAmAex09035pgffpGYq+WlzS2QE2nPW3/sodCExMMbun4TIDZIxSdPksia76gAv3tyL/4MTxdCWQWvL2yJX9s4LAXmveuV3aN1rsFIVdwDP/hUYKg==", "7cf66ee9800b9286756df4e1f6c3ef7f": "A2NYJAN5vBx6Q/76e5upRsKiOQ8MR1hAuriqFDbt/uwqZWETZ4iLRGcbGrSArCfwctdB3doRqejmGlEPaKlFlXGP2aIo7mhU4xCKWym3eCJ1Z229Wj3MlOAHl2Av0PDyuw0Gndnx1Hj3VgxOTVCiJ+kuosHCqPhwbaUfSRIwMQzpvEkkeb/Z++bbwJ6NatOilsRG8Q==", "6f198830e6004c51d95f8b309f698328": "Q5B2wktc1AaCW5Polo/CckyM3wQ2aFEgiB6GotSVZ84yn6TuNxVJzcaGxqWbT/eSOSY1GP8w6MlWJOw4h8++6xXQSne0NjN+XgmK3KUxZi/XsSNzPzwQb95YHNYOE8uu65mIjMt9Lun8YPe4GMFHM5btu36ijWI2LjqmhcO5J7rLGM2DIxFt9en7Yw/seTYRfOsCxQ==", "3a5599705b39591142f5861fde13464a": "uiftunLA1XTeyva5YAvO5wNa1Xz/5q5Cyz8ZzBSf7dfl++s92Cgy13PR4e4bLYhQr2gFR1Lv/4jYbjDl3WBpV7KwGXFH+9NvclDdvA8p1sTfGkErfYMEo7SoOWqvZt2of9+gvbq/tV+w/3sqH+cRMmTYQqp6dPbnUJwOqGtgtg0VsvNKdmTyfxQnpULUQ9JZhCWTSGy/FC5f6Q==", "624e9fa58259141305d1b11b28583c80": "g18kRB7o4Vq4Od2rxxaiK118oZkGOu1MNy0UC3ULf4p8mPFHQSkUoOrnSyX54RZCpX6FMkZdoQMMja8rHFBJohv26bXOs5bP2I3Kgcv1CVQjgA27DhcV5uOU35rEPy0Ixb0Mu1A4Jl+iyURGUud9IY/aMLSW+cpp2eDyXBkjBIQuawgctAH8rF2OhO74i4UvUPQoqWrcpU/yRg==", "aab76b4f7bcdcd647ad8661f26807086": "UXyvSkZzP8cDR/KrxilMzKufMirCTzYUPzhTVUBjhE2h98TWvMGuheAFh3s1mRYw+iiD2/Z2udBzM/aBgPHHD+kXfD9fCQ3HIzqys+Ix9joyvWNtM/np8DdD+mm2FBziLp8akPly064KHsDRfhl/jdm63RuOQC7jqmeI17cewJWyNoWIXECaYobJo/Rb+H3uXiMvzk/UbSXgzw==", "48d3b38e21298a02ce0ed4eb691d91b8": "oBZscwLH7VSK4Vg75Dntnxr1SNEU7Gg7Ny49Q4RDeY/SG4XMHUwx3siPZsSErvpCyZtRYx9gx//Xa3PFR3Q83WyhPjlxke0tk9CpsnAh0AGkRVHC40O67+tM5yxDHhAIh+Obq4/Qyp58LZ9/BZFcOVphy6ArDwsxFx13jompMGDBo3mApNf7vpQAfNJsa9ciNq4FNH1gg1juLg==", "b00c2c5e2ad77a4dd9e992a0ef4f271f": "JaMsspqiEkjh54wIu1lQb/nE19GTv+smRopwBwvNe9X/4xQdQvU2K2e+ZQliDMBDTx8WW+EH4xqQXgXCG56aeKL68ecvedypgV1O65ddpdnqFoCBj28ogpLrGTwGUb5jy4/2ycEaQJKhLpe2g1UcqlcI1eazet8n41/1j2RPc4W0XeXBnNa6kerOQxfrcLGKDMF+ba9plT8bwA==", "35b824d91bee9529a45a8c555fd509ef": "4Odc91mHW47eLNBXJ2aOHQBi71EzADGgxOHfWCEQvCLcg6N9xhOfhkQl9BxMZC3Wh/zF0vNeeOJ3vxGYNhRml/HvkGhvB32lzTWKek4DuRMjnBBhfcHy/9glIaPec330mMlS9D/YJAsLrDmiGfBRM2REh2pRCPTaPs7L7fWdHZh8R2z1kKHynNoZi4q1nguD5TcxqL3q6cHUfQ==", "6852aa1b4863bd88d617f212d1ac8ff1": "HuOuU4FwodCQggy9CyPMcTi+XU/IM29ZVX7tmLNHMrHdbMhzVLQpjcs6kQtDLTxd4PDuX8FQ9v49hOMlyphqewWRYcDpjVpYYIkt2NWtqOrlYnfqPJcJ0HF8xIcojVGOgSAtb8Iasu3shCwRR2Yftxc4jr+G+7F1XTuUMo2tq1alhjhHt4Bonc+LooWcY9ouvxSIMUIGBnM+Tw==", "3c2732c585e8452c534d5acc0bab7407": "dq0bb0vqOcFZZ/sHln69zb2xyFSZNqKWeA75RcWHIqQVcwS6tp5c6/VGX0HbhIVGpzvXJwBGX0I998d1hV7BuCWH6jOFlkU72w3oPBJb9FvkCl+N7Qi9Q0TAR3QNlTTn7nPnbK8ESBsqo0pq1vp+IwJyti4Y8CbVRenYyEcEDK5hLneyjIzHq04KjV21zUQ5xfbHsnbP4Qt/OT2E1CfTZ/r7kuKgWR6X", "90a252acdab9a83ae9dda0ddcb1fc92a": "K47Le3KBZmb/TSNPzg4ibF1wL2Wrf4Tu1pBze41wTANyk3fqLGmtw2SJgKaG4dAfJNsHb940CqvYxm+2V9yTTBnGle0msXTXh8SBric5lLHmPUM4pywEm+WYoN/mUNacBMg01W4NrLqawGK66mMMUTdk9CfsdElnvKUCoESZ1bm9GsF7j3b50gpB0qoaC8r41INngAybRBDz8QoRIzkbKMfbUfDUKS4n", "15f9b5d323866279ffb8ba0454d8d320": "ifg8oxT7xBkkxvTqZceLDvDNlEjLsK25Qus7F5Sv0MCt1miTQ9Puc06CeipOX0CeZNf1tdadDJZylXFV0eXsxyRUs44GUSb/jtN97uP+mCGwXl26evCwfM1wCZklp+EvKcgpC49iExQnakjb8hwDCzl7Phm7Hty+NeQZl+QRCLZoAh70pE8jFMBG22E9V6AKTe1ffF2C1DA1jfG9D0z5JBkMKpqLdHki", "14326a7ac5377e682b3e31d1effe3352": "cSn+RPlbaySREI258OMeTns+X5MxM2udpPogH9ktWXsz+XiWJdTvvzzHhxj7IOnRydYBW9c5oDpIM1I0QubQmxq6T1cty5G1MdHvKlwx9Cs/u0G4MNt8AW8+Ke3huNek2yHfMioba5hhfody0Z1236mC+1dnGjdnawjF0QL6FhXeyQXZ7zTjHtT7tH/iow==", "e2f573ae170a37416dd21214a033906e": "aijafKTC6Z47wKc8UTYxOOEYbJJZ3m3wAI1mpU2J80GLtWGD1GvRagLormOQUzpv/ESiIoIuNo1Pfv94ZrI7fr0bva1cIHnpRUw/O6suqq6u8r8b+E2f+uCIqE+ef/41GmSPd0R+twsc9vEqqysNgUwLyOzhEY434uFkKoqkUo8mtKR/MIXiuhE1w/vZUw==", "d2a31b7d6cf6e7ab1f8e29eff11e7a4d": "/t8pUWaOK4vHkhSZ05SG4T967OKcJMLVnjhpsaOBf/RMvXrTuuLaiqJ/orheUo6hrHLT38wtZUh9sEl+qjGcCFASKfURS4wvpS/3FULDrSM6WF5Ul9OdgczLs4H1jdBbcmbSLCQ7y/9yY9G/6fq/FDc7hCgzvyg+AxIRQ+W6ML9OJTij+dxfwnvaC0xxtw==", "d6992c3a45be2849ca0174f361eca066": "q+0Dp3l541c+R5iYopNmnVj3R54iu4WBXk+2zFPGDeF9wCiFmZs7oCNtI4gJMMCpmp21C+tG3j8mO1e6L12qLONNKkWCHNDYCzct9N59yZMA+F1cc/Tlgb2zBAT5AlnY7EnUNDGSWj6r2QTN+rtEmc5yrmMtdxoxY+JgZuJ0Ht2iTCYpe7KdHmFOKGDUWg==", "103064c380be690e5aba49f7edfb2d15": "jb/Palt6wLbmUVXbu0DjB6sLGlt1HFtuZKe8UH0BCIVhekhoxDPLuqXEEEPv/ilr9IPysH4BFVBa+/ZsiCtkWT1KlUUnYj4ExzAHLNwuAQ3pCWdZlxslBTw9vsMsazWb7KV9/9iBBMjp3EIZNjD7nmotTpZ7b4d2rcjvdElhhDWungbBTXmkE6mFENe7ALSahxHtql+sCEnw72EPcAFjctfPwre5Q0mFzebXf8bM+gpj", "c81be9a6a5584e86e622d64de00c7138": "d5ZkQeXxGZIxWPKCJGpU9KTGm0i5jRH9jDZXkpFgmlcIuD5ovyAQNle3dfUXLoFcSVR0aeMvps6vZmPDf9H4WpdytIJA8BSjM6EwWinLrPyOlu0EiktSLDpColjx9t1BbQkXB4cyIlBQxmybyOkE4P1kPQwO3hXbI62r51w1QgrnXNKHEyCaWsVuxEJlyS/2+ONT8M79aJvQ3Hopy4+ucwp9AZqrMEUzxWtukuncYOYT", "963ff57e5e10f8e035048070b2de005d": "iEuS2q5eGs9jJlQcUBg1c1uhVnaNDCOtXDoO0O9XzOMWSWhvMaYVmk5QMX/AFFINBYpE4fh2oG5pBLXqK0Pc71erL9hrzHp9YOGKhEYIke1NYGhTl6GvJZ/LVTb7xzrIS5GC1xMFXHA6qkJeqX8CmDoYAsHCJv2NacJtde5k9arvPElswl2TXJcC0WrCSs3sIUzFIR04qNkJZqUOqSO+yoaRPZM5", "14698a9e0c45ac40ceb841e884422590": "Hk2IE/dDTuLE7o0l+7t+hLrSxwwyir6C03DbW4t/BpfCF2TMiqC2JUvHAwQ3riALQeSu5Xkfyq6ZIUmdVhtucPX1makSbvDxORYwhC39jYMDHDkHXdH6hiNdpzjWHB7K0Um9uwVrfQIMHjL/vW+xHAjAB3g2+Q0Ltab0jJ2SGa5fHaVPdPi5rd+KjRGlvwIKim8mKiD1qgDpuRREL9i5IqncosVN", "b5794277f02d8f2c0e93dcdbda6b7de6": "bsg+PBOuMSbAiyvzNBLMJJSrN8N+rJS+v2EilZM7ffjZkjHVVfAvEJX6+m95oZsvYzClFdbIhKDACzFfyVUrkCTYlofgjkr7ptC7qvDnPqf38ADGV9lyl75hiRb2JQgO+ltqthVtPINYMmDQRP9mKxvofkOlBVRNSNu/K0g959YM70nMoVGyD3HSc7woJN2kQMP07Hr28c+JPPdH0KWAQgj98p+W", "f6fbc05ef8c929e4691033417c58b9c5": "SXlw4kdwy77/033Hp5Z5GGvxQfbo+4M9jM3hYLXVbusmbEp9GtDJkStZjwq/8V5vrhMmsywF9iVGGeWORYSAbYbo0yxMZyXXD7dE6JyM861ZWvFYttDFEYB9w5Gniaj0vkAe9Mbog6eKQSVRCaSv8ORYPvmzUzZQ3bpgYrCLYGK6v1wbcwhHDvL3L1d04mXhWBVMMJ/utNa5ZSxvRsjDfxsCI1to", "7533b3b621d11aa27bdabce9b9cfd894": "XYEziSK2EgCmt3mz8iAEu1+IZWjWxSwl8MstTk9mZh++Vg88zqCZio8GpPKFUrSqnZFVPSdpuPdCi9cTzx/Hhr7kt8kbA6hS093wGcNec2Lj4HP/ER96QGVU96NO+MKzycGIFKudyyeWHml5fn2lnT7uPsxcQjZ1SXL9WCkLLMgFGusjE5FIHkOKp0FYgi/KJalnPZInbdZZjwfI/QDzOSQmU9cx", "08f9a27c98cb9543e1a67d46387c7f1b": "y2mJCMojT6nGsU6Gz+8pfnvZI264GsJmSIgishBs6YD1MdkyzhnkNMdlLYGohEX8SQZiPNxQac4ZUGl/QcK899BWvdhpvalMETN6MrvJQvxkgzOG7O2VSb+4B0ktgf7sDdZJfXWFPtCTm8XdoCZK1e1BAmczY5HnxQNtKGtSnAlE8G9XwJaM5+NQetP0gzZZh/EXQBbGmwJu92O0xX65LZmhp1oX85zU+w==", "500e77012e10da6c94ecb35bf79bd7c0": "X77a/I8TQ7wOIH5WU5OFs51gKGq8FDj7ZOyjGp9PsE5P4RFgkaFDX5Dt9ovx/BeaUVVrB+tJ79vMDnz5RnOch/eME1sVvwLemo+ko6DCSFeE5KETtAgwsghCQtSlaDqp+a/xStzv7wUgd1him5x5yiJk8yb6aagL7X+hd7dw81PtNyprhqRym4aU4ErlmWDj/nCE3BddLjUpNazCMj92E1iuyJhFazF0Nw==", "3e500b7cac137ffe6458999097e3e327": "hqcFka4Gxp5aIDyviCVWvgw+Kp4qUPJpEI3RJCYYi3wHaZl5XHe7Vudi/zulu0oGZ+enhEnktNzR5yClQ6wTaqYd8XzBYDwi0ewEafl9VVLVj2bUqq17kx5Snrq6Hs8xey8xjzShSpWKKYa8qL1FYskYQeH9dNCOH1H20XiWcR3envf1EUNvgdhIhLex1lwlYA9uI80wW5tUdmlR20aKblyt+qqt2Z7OFg==", "30f122d7ba9db71552fcd264454c4adb": "yl5A377Y6Fv9EWxXI+mvLMEXJy188AITlu9eWVEtAqZ2/6dnLiZ8/OdP6wTHdeFqliXEUyFn4jy55XkrWG/tc0hzfDjlcOg+G63i1tuK2ZaZZjnuS4tMydqzkoJxVKjsudsp3gGvDYUscupUsLFYGQaJnOgDLJMhMWbIrTHaf+BO7dR/qu29NB/lAHMXVZPwTsZmXVu778TVmXCGN0OWA0r9ExuFlapMYw==", "badf4e1eae59aa92629c4715d6a764df": "/Ogw0Kist7infbhY9WUdm+Sxk2NfuPrVRR7rsdQFVkuOljyUxtiBaCO7FKx30P7+VK7qKEMVTpf5MyAW+2RUutaAVtgFq417X2ntHBDwVFq1OGH+3W8HPUHjrESjhCYJQYZct7sKwPiMWpXMJC1k0J250T5Er/2w3rPKorc5pNXSYeRd/2wnwAvyzM2EmGxKBWDs0uhMUhiOA8U8WtFRUUNpwG1+", "e527c2c4efd62e62658e5857656153a6": "Tujn7BEHEMgjV0prTg9Pv8/nRVgKExp0KNrGz8kWzv07F//YNGU9rX76FRSuX2PpXhID8TV1YPFzz3vlEF7dMe7KKx/aDn3O+UXher1gTkp5bcertujVLi2RcNHsypydfC5tnS4FSF94c0z34zW0Z3n+f2ph5iN94OAvH+IoZZM5pGvfDQ2+dcX0j4iWfsKsDwh0+Im1NY1LA440BNj4hNhn3B9n", "acf5af20df3038a9d354516ab873912e": "0qYMrHBHzeJfDbNev7bgBcA9sQZharM/3mXFSFn1Too6II94dQXxkrBQptNNxCiGeereVvWmEdH4POOqs97a91vu94NF7xwLhp5XvoI21oLYMNsBOtZh7gyTlclIwBO5FU81Ge98bOm4JI4y1eGUcbEUjcBV7v+Eptuicheq5ibDMCDJCKCn10HQqWkLx8KoYqaCvfC21Ku7", "c959c9973e4d27a5acd4826334adbe68": "0Uc1VxU/niXnOJ9q8ni9SIEzpiVMXFSLNTqF+qv8/ArIkU+tnXIivsMbz4wZEJUr8rEZhbwprIBbjLFkQWL+5EQ3MP6bJsFCQPEjaCJWoiNiZUIbGQJySeDt44wpWfu3ipzoiSLs+XmjNXTPnZ4gRlp3D724pzNDV8UI7rIqpImDmTEeaakjDhGaEaBLDM+j82ISm4tlyZXZ", "63b1fb50104db40074034ce82f2e7d12": "gxuDuqgiINCKuu0EYnyYg27Mim8jqovcxyF/kZ84LIgJ+mYC+9D+mXyMutC/t2SA/RddSvOnIamTq/h2BoGHeQjz0+fsf5mr7sOSdb0avCB3Krf1tijaPBjb7SlcJJvWXZqrtFOGwkF0pA0r9PTkeSaKZyzh0lNu/kthBBBoerRYYeRFz/vMM1Y1Wxuc/RSKanY0oOjle1QgvMSOvTw=", "e3f9a131cf15d2ac9bbd6d3f784f4131": "Sq34TqrQ+zIYrVhtT8cznE40SKlYOUxMDLATubFK3IswmYYK9tDmyYNrYJRLmBENHOWshCCh3EUY85p3ebwHhd+B3lVhdizXTtgZln+E5vhjpeSUE2ZTb58KUnShiS6tUh+l00eK94nx3VtUUnPTOkmDKClCFCtwht25ytqJVln0hPNyaSK5+PxYXOncvfByhN0NZszcIWGRS0nZl1o=", "0ea9b4219bc4d1187f08c9818874a4ec": "RywC+3N1FodVtBwNAXYhbN+NfPcUFWNnFuxj6zwPM9GJgFAmzz3mG4N2hMpW9ePV2OP/ews2BoGd2N19O+4w8hfpU1DvvSs4gYVEqqkqyvkpS6z4Y4pe/73EGofkt0gxkbGExLW1XZavq9os0LFrji/Cq1aEJKErqDq5Q+jUV60A6o4+fe8tycXZseYP9gfV1ZHy5DwwckTR78+hyYM=", "07b1a5bfcca0b5dd1c68c1e40b8eaa9a": "iujmrb6zVNuEIGETA58SyqcN4xwT7WRXDaGbxlQ42W8YNOCQxcd69whJvbJKPiIws9oBMmP76Nzq9R1L8CEdHf8N8gpMN5pbFOiEQf2vSCfWUWbMWHCXYoqDKKK68Hej/imKLmH5T609PWe7Jjxwh8NLeB44CmYxlvemgTAATRZQnGOl1bgqqZqdwJ+B7A7zKvjhI6ORzM2+UGEUKO/d"}};
+const $ = (id) => document.getElementById(id);
+const b64 = (s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0));
+const hex = (u8) => Array.from(u8, (b) => b.toString(16).padStart(2, "0")).join("");
+const won = (n) => n.toLocaleString("ko-KR") + "원";
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+// build.py 의 norm_name / norm_birth / norm_id 와 동일해야 함
+const normName = (v) => v.replace(/\s+/g, "").normalize("NFC").toUpperCase();
+const normBirth = (v) => { const d = v.replace(/\D/g, ""); return d.length === 8 ? d.slice(2) : d; };
+const normId = (v) => v.replace(/\D/g, "");
+
+async function lookup(name, birth, sid) {
+  const enc = new TextEncoder();
+  const base = await crypto.subtle.importKey("raw", enc.encode(`${name}|${birth}|${sid}`), "PBKDF2", false, ["deriveBits"]);
+  const km = new Uint8Array(await crypto.subtle.deriveBits(
+    { name: "PBKDF2", hash: "SHA-256", salt: b64(DATA.salt), iterations: DATA.iter }, base, 512));
+  const rec = DATA.records[hex(km.slice(0, 16))];
+  if (!rec) return null;
+  const blob = b64(rec);
+  const key = await crypto.subtle.importKey("raw", km.slice(32), "AES-GCM", false, ["decrypt"]);
+  const pt = await crypto.subtle.decrypt({ name: "AES-GCM", iv: blob.slice(0, 12) }, key, blob.slice(12));
+  return JSON.parse(new TextDecoder().decode(pt));
+}
+
+function show(html) { $("result").innerHTML = html; }
+
+$("f").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  if (!window.crypto || !crypto.subtle) {
+    show('<div class="box no"><p>이 브라우저에서는 조회할 수 없습니다. 최신 Chrome·Edge·Safari로 접속해 주세요.</p></div>');
+    return;
+  }
+  const btn = $("btn");
+  btn.disabled = true; btn.textContent = "조회 중…"; show("");
+  try {
+    const r = await lookup(normName($("name").value), normBirth($("birth").value), normId($("sid").value));
+    if (!r) {
+      show('<div class="box no"><p><strong>장학금 수혜 대상자가 아닙니다.</strong></p>' +
+           '<p>입력하신 이름·생년월일·학번이 정확한지 다시 확인해 주세요.</p></div>');
+      return;
+    }
+    const rows = r.items.map((i) =>
+      `<div class="row"><span>${esc(i.field)}</span><span class="amt">${won(i.amount)}</span></div>`).join("");
+    const total = r.items.length > 1
+      ? `<div class="row total"><span>합계</span><span class="amt">${won(r.items.reduce((a, i) => a + i.amount, 0))}</span></div>` : "";
+    show(`<div class="box ok"><h2>${esc(r.name)} (${esc(r.sid)}) 님은 장학생으로 선정되었습니다</h2>${rows}${total}</div>`);
+  } catch (err) {
+    show('<div class="box no"><p>조회 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.</p></div>');
+  } finally {
+    btn.disabled = false; btn.textContent = "조회하기";
+  }
+});
+</script>
+</body>
+</html>
